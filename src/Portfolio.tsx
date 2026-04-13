@@ -4,6 +4,7 @@ import {
   Linkedin, 
   Mail, 
   ExternalLink, 
+  ArrowUp,
   Terminal, 
   Database, 
   Layout, 
@@ -330,6 +331,14 @@ const SKILL_GROUPS: SkillGroup[] = [
     skills: ["Docker", "Kubernetes", "AWS", "Terraform", "PostgreSQL", "Pinecone", "Qdrant"]
   }
 ];
+
+const NAV_LINKS = [
+  { name: 'About', id: 'about' },
+  { name: 'Journey', id: 'journey' },
+  { name: 'Works', id: 'projects' },
+] as const;
+
+const TRACKED_SECTION_IDS = ['home', ...NAV_LINKS.map(link => link.id)] as const;
 
 // --- FEATURE COMPONENTS ---
 
@@ -1426,12 +1435,12 @@ export function PixelCard({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden inline-flex isolate transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] select-none ${className}`}
+      className={`relative overflow-hidden inline-flex isolate select-none transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-within:ring-2 focus-within:ring-white focus-within:ring-offset-2 focus-within:ring-offset-black ${className}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onFocus={finalNoFocus ? undefined : onFocus}
       onBlur={finalNoFocus ? undefined : onBlur}
-      tabIndex={finalNoFocus ? -1 : 0}
+      tabIndex={finalNoFocus ? -1 : undefined}
     >
       <canvas className="absolute inset-0 w-full h-full block z-0 pointer-events-none" ref={canvasRef} />
       <div className="relative z-10 w-full h-full flex items-center justify-center">{children}</div>
@@ -1468,6 +1477,7 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
 export default function Portfolio() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
@@ -1480,23 +1490,62 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const offset = window.scrollY;
+      setIsScrolled(offset > 50);
+      setShowBackToTop(offset > 700);
+    };
 
-      const sections = ['home', 'about', 'journey', 'projects'];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            setActiveSection(section);
-            break;
-          }
-        }
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sectionRatios: Record<string, number> = Object.fromEntries(
+      TRACKED_SECTION_IDS.map(id => [id, 0])
+    );
+
+    const resolveActiveSection = () => {
+      const nextSection = [...TRACKED_SECTION_IDS].sort((leftId, rightId) => {
+        const ratioDifference = sectionRatios[rightId] - sectionRatios[leftId];
+        if (ratioDifference !== 0) return ratioDifference;
+
+        const leftTop = document.getElementById(leftId)?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY;
+        const rightTop = document.getElementById(rightId)?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY;
+        const focusLine = window.innerHeight * 0.22;
+
+        return Math.abs(leftTop - focusLine) - Math.abs(rightTop - focusLine);
+      })[0];
+
+      if (nextSection) {
+        setActiveSection(nextSection);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          sectionRatios[entry.target.id] = entry.isIntersecting ? entry.intersectionRatio : 0;
+        });
+
+        resolveActiveSection();
+      },
+      {
+        rootMargin: '-12% 0px -58% 0px',
+        threshold: [0.12, 0.24, 0.36, 0.48, 0.6],
+      }
+    );
+
+    TRACKED_SECTION_IDS.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) {
+        observer.observe(section);
+      }
+    });
+
+    resolveActiveSection();
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
@@ -1507,12 +1556,8 @@ export default function Portfolio() {
     setMobileMenuOpen(false);
   };
 
-  const navLinks = [
-    { name: 'About', id: 'about' },
-    { name: 'Journey', id: 'journey' },
-    { name: 'Works', id: 'projects' },
-  ];
   const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL_INFO.email)}`;
+  const profileFallbackUrl = `${import.meta.env.BASE_URL}profile-fallback.svg`;
 
   return (
     <div 
@@ -1618,8 +1663,10 @@ export default function Portfolio() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-          <div 
-            className="text-xl font-bold text-white tracking-tighter cursor-pointer flex items-center gap-3 group"
+          <button
+            type="button"
+            aria-label="Go to top of page"
+            className="text-xl font-bold text-white tracking-tighter cursor-pointer flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             onClick={() => scrollTo('home')}
           >
             <div className="w-12 h-12 rounded-lg bg-[#050505] overflow-hidden flex items-center justify-center border border-white/20 relative group-hover:border-white/50 transition-colors">
@@ -1630,15 +1677,18 @@ export default function Portfolio() {
               />
             </div>
             <span className="uppercase tracking-widest text-sm">Aditya<span className="text-neutral-500">.</span></span>
-          </div>
+          </button>
 
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <button
+                type="button"
                 key={link.name}
                 onClick={() => scrollTo(link.id)}
-                className={`text-xs font-mono tracking-widest uppercase transition-colors hover:text-white relative ${
-                  activeSection === link.id ? 'text-white' : 'text-neutral-500'
+                aria-label={`Jump to ${link.name}`}
+                aria-current={activeSection === link.id ? 'page' : undefined}
+                className={`text-xs font-mono tracking-widest uppercase transition-colors hover:text-white relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                  activeSection === link.id ? 'text-white' : 'text-neutral-400'
                 }`}
               >
                 {link.name}
@@ -1649,6 +1699,7 @@ export default function Portfolio() {
                 href={gmailComposeUrl}
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Open Gmail compose to contact Aditya"
                 className="text-xs font-mono tracking-widest uppercase text-white block"
               >
                 Contact Me
@@ -1657,7 +1708,9 @@ export default function Portfolio() {
           </nav>
 
           <button 
-            className="md:hidden text-neutral-400 hover:text-white z-50"
+            type="button"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            className="md:hidden text-neutral-300 hover:text-white z-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -1665,18 +1718,51 @@ export default function Portfolio() {
         </div>
 
         <div className={`md:hidden fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-transform duration-300 flex flex-col justify-center items-center gap-8 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          {navLinks.map((link) => (
-            <button
-              key={link.name}
-              onClick={() => scrollTo(link.id)}
-              className="text-2xl font-light tracking-widest uppercase text-neutral-400 hover:text-white transition-colors"
-            >
-              {link.name}
-            </button>
-          ))}
+          <div className="w-full max-w-sm px-8 flex flex-col gap-4">
+            <p className="text-[10px] font-mono tracking-[0.35em] uppercase text-neutral-600">
+              Navigation
+            </p>
+            {NAV_LINKS.map((link) => {
+              const isActive = activeSection === link.id;
+
+              return (
+                <button
+                  type="button"
+                  key={link.name}
+                  onClick={() => scrollTo(link.id)}
+                  aria-label={`Jump to ${link.name}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`w-full flex items-center justify-between border px-5 py-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                    isActive
+                      ? 'border-white bg-white text-black'
+                      : 'border-white/10 text-neutral-400 hover:border-white/40 hover:text-white'
+                  }`}
+                >
+                  <span className="text-2xl font-light tracking-widest uppercase">{link.name}</span>
+                  <span className="flex items-center gap-3">
+                    <span
+                      className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                        isActive ? 'bg-black' : 'bg-white/20'
+                      }`}
+                    />
+                    <span
+                      className={`text-[10px] font-mono tracking-[0.25em] uppercase ${
+                        isActive ? 'text-black/70' : 'text-neutral-600'
+                      }`}
+                    >
+                      {isActive ? 'Active' : 'Jump'}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
           <PixelCard className="mt-4 border border-white px-8 py-4">
             <a 
-              href={`mailto:${PERSONAL_INFO.email}`}
+              href={gmailComposeUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open Gmail compose to contact Aditya"
               className="text-sm font-mono tracking-widest uppercase text-white block"
             >
               Get in touch
@@ -1700,7 +1786,7 @@ export default function Portfolio() {
                     alt="Aditya Jayashankar" 
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150/000000/FFFFFF?text=AJ';
+                      (e.target as HTMLImageElement).src = profileFallbackUrl;
                     }}
                   />
                 </div>
@@ -1736,11 +1822,11 @@ export default function Portfolio() {
                   </a>
                 </PixelCard>
                 <div className="flex items-center gap-4">
-                  <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer" className="p-4 border border-white/10 text-neutral-400 hover:text-white hover:border-white transition-all">
+                  <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer" aria-label="Visit Aditya's GitHub profile" className="p-4 border border-white/10 text-neutral-300 hover:text-white hover:border-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black">
                     <Github className="w-5 h-5" />
                     <span className="sr-only">GitHub</span>
                   </a>
-                  <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" className="p-4 border border-white/10 text-neutral-400 hover:text-white hover:border-white transition-all">
+                  <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" aria-label="Visit Aditya's LinkedIn profile" className="p-4 border border-white/10 text-neutral-300 hover:text-white hover:border-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black">
                     <Linkedin className="w-5 h-5" />
                     <span className="sr-only">LinkedIn</span>
                   </a>
@@ -1749,13 +1835,13 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden text-neutral-500 md:flex md:flex-col md:items-center md:gap-4">
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden text-neutral-400 md:flex md:flex-col md:items-center md:gap-4">
             <span className="text-[10px] tracking-[0.3em] uppercase font-mono">Scroll Sequence</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-neutral-500 to-transparent"></div>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-neutral-400 to-transparent"></div>
           </div>
         </section>
 
-        <section id="about" className="scroll-mt-32">
+        <section id="about" className="scroll-mt-24 md:scroll-mt-28">
           <SectionHeading 
             title="Yes, I made my about page look like a system spec. No regrets."
           />
@@ -1822,7 +1908,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section id="journey" className="scroll-mt-32">
+        <section id="journey" className="scroll-mt-24 md:scroll-mt-28">
           <SectionHeading 
             title="Journey"
             subtitle="Every collab, commit, and chord that got me here."
@@ -1835,7 +1921,7 @@ export default function Portfolio() {
                 
                 <div className="flex flex-col md:flex-row gap-6 md:gap-12 transition-all duration-300">
                   <div className="md:w-1/4 mt-1">
-                    <span className="text-xs font-mono text-neutral-500 uppercase tracking-[0.2em]">{exp.period}</span>
+                    <span className="text-xs font-mono text-neutral-300 uppercase tracking-[0.2em]">{exp.period}</span>
                   </div>
                   <div className="md:w-3/4">
                     <BorderGlow 
@@ -1849,7 +1935,7 @@ export default function Portfolio() {
                         <h3 className="text-2xl font-medium text-white tracking-tight">
                           {exp.role} 
                         </h3>
-                        <p className="text-neutral-500 font-mono uppercase tracking-widest text-xs mt-2 mb-6">
+                        <p className="text-neutral-300 font-mono uppercase tracking-widest text-xs mt-2 mb-6">
                           {exp.company}
                         </p>
                         <ul className="space-y-4 text-neutral-400 font-light">
@@ -1871,7 +1957,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section id="projects" className="scroll-mt-32">
+        <section id="projects" className="scroll-mt-24 md:scroll-mt-28">
           <SectionHeading 
             title="My Works" 
             subtitle="Selected applications built to solve complex problems."
@@ -1951,7 +2037,7 @@ export default function Portfolio() {
         </section>
 
         <section className="py-32 flex flex-col items-center text-center border-t border-white/10">
-          <p className="text-neutral-500 font-mono tracking-[0.3em] uppercase text-xs mb-6">
+          <p className="text-neutral-400 font-mono tracking-[0.3em] uppercase text-xs mb-6">
             // What's Next?
           </p>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tighter text-white mb-6 max-w-4xl leading-[1.1]">
@@ -1965,6 +2051,7 @@ export default function Portfolio() {
               href={gmailComposeUrl}
               target="_blank"
               rel="noreferrer"
+              aria-label="Open Gmail compose to contact Aditya"
               className="px-10 py-5 font-mono tracking-widest text-sm uppercase text-white block"
             >
               DROP THE RIFF
@@ -1974,16 +2061,30 @@ export default function Portfolio() {
 
       </main>
 
+      <button
+        type="button"
+        aria-label="Back to top"
+        onClick={() => scrollTo('home')}
+        className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 border border-white/20 bg-black/85 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-white backdrop-blur-md transition-all md:bottom-8 md:right-8 ${
+          showBackToTop && !mobileMenuOpen
+            ? 'translate-y-0 opacity-100'
+            : 'pointer-events-none translate-y-4 opacity-0'
+        }`}
+      >
+        <ArrowUp className="h-4 w-4" />
+        Top
+      </button>
+
       <footer className="relative z-10 border-t border-white/10 bg-black py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-neutral-500 text-xs font-mono uppercase tracking-widest">
+          <p className="text-neutral-300 text-xs font-mono uppercase tracking-widest">
             © {new Date().getFullYear()} {PERSONAL_INFO.name}. All Rights Reserved.
           </p>
           <div className="flex items-center gap-8">
-             <a href={PERSONAL_INFO.github} className="text-neutral-500 hover:text-white transition-colors">
+             <a href={PERSONAL_INFO.github} aria-label="Visit Aditya's GitHub profile" className="text-neutral-300 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black">
                <Github className="w-5 h-5" />
              </a>
-             <a href={PERSONAL_INFO.linkedin} className="text-neutral-500 hover:text-white transition-colors">
+             <a href={PERSONAL_INFO.linkedin} aria-label="Visit Aditya's LinkedIn profile" className="text-neutral-300 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black">
                <Linkedin className="w-5 h-5" />
              </a>
           </div>
