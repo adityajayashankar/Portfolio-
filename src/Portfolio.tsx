@@ -1624,7 +1624,7 @@ export default function Portfolio() {
           >
             <div className="w-12 h-12 rounded-lg bg-[#050505] overflow-hidden flex items-center justify-center border border-white/20 relative group-hover:border-white/50 transition-colors">
               <img
-                src={`${import.meta.env.BASE_URL}aj-logo.svg`}
+                src={`${import.meta.env.BASE_URL}aj-logo.svg?v=20260413-1136`}
                 alt="Aditya logo"
                 className="w-full h-full object-contain p-1 grayscale group-hover:grayscale-0 transition-all"
               />
