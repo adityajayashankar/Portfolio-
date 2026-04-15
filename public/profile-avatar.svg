@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Aditya Jayashankar profile avatar</title>
+  <desc id="desc">Circular monogram avatar with the initials AJ on a dark background.</desc>
+  <defs>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9933" />
+      <stop offset="50%" stop-color="#ffd700" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="256" fill="#050505" />
+  <circle cx="256" cy="256" r="214" fill="none" stroke="url(#ring)" stroke-width="8" opacity="0.85" />
+  <circle cx="256" cy="256" r="178" fill="#0c0c0c" stroke="#ffffff" stroke-opacity="0.14" />
+  <path d="M112 344h288" stroke="#ffffff" stroke-opacity="0.08" />
+  <path d="M256 112v288" stroke="#ffffff" stroke-opacity="0.08" />
+  <text x="256" y="292" font-family="Segoe UI, Arial, sans-serif" font-size="148" font-weight="700" text-anchor="middle" fill="#ffffff">AJ</text>
+</svg>

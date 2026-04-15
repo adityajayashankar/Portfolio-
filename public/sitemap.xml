@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
   <url>
     <loc>https://adityajayashankar.me/</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/og-card.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/profile-avatar.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/projects/deplai.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/projects/cortexkg.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/projects/security-auditor.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://adityajayashankar.me/projects/medical-chatbot.svg</image:loc>
+    </image:image>
   </url>
 </urlset>

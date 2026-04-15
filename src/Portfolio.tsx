@@ -279,7 +279,7 @@ const PROJECTS: Project[] = [
     id: 1,
     title: "Deplai - DevSecOps Platform",
     description: "An end-to-end multi-agent DevOps platform that ingests code repositories, performs architecture and dependency analysis, and auto-generates cloud deployment plans. Implemented Terraform-driven workflows with Dockerized pipelines.",
-    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop&sat=-100", 
+    imageUrl: `${import.meta.env.BASE_URL}projects/deplai.svg`,
     technologies: ["TypeScript", "React", "SQL", "LangGraph", "Claude SDK", "Terraform"],
     githubUrl: "https://github.com/adityajayashankar/Deplai",
   },
@@ -287,7 +287,7 @@ const PROJECTS: Project[] = [
     id: 2,
     title: "CortexKG - Agentic Knowledge Graph",
     description: "Built a cybersecurity intelligence system combining Neo4j graph traversal (7M edges) with vector search for multi-hop CVE reasoning.",
-    imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop&sat=-100", 
+    imageUrl: `${import.meta.env.BASE_URL}projects/cortexkg.svg`,
     technologies: ["Python", "LangGraph", "Neo4j", "Vector DB", "Groq API"],
     githubUrl: "https://github.com/adityajayashankar/CortexKG-Agent",
   },
@@ -295,7 +295,7 @@ const PROJECTS: Project[] = [
     id: 3,
     title: "Agentic Web2 Security Auditor",
     description: "Developed an AI-driven security auditing system performing SAST, DAST, dependency, and configuration scans.",
-    imageUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop&sat=-100", 
+    imageUrl: `${import.meta.env.BASE_URL}projects/security-auditor.svg`,
     technologies: ["Python", "LangGraph"],
     githubUrl: "https://github.com/adityajayashankar/AI-driven-Web2-Security-Auditor",
   },
@@ -303,7 +303,7 @@ const PROJECTS: Project[] = [
     id: 4,
     title: "Medical Chatbot",
     description: "Built an AI chatbot delivering real-time healthcare responses with 90%+ relevance.",
-    imageUrl: "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&q=60&w=3000", 
+    imageUrl: `${import.meta.env.BASE_URL}projects/medical-chatbot.svg`,
     technologies: ["Python", "Pinecone", "GitHub Actions", "TypeScript"],
     githubUrl: "https://github.com/adityajayashankar/Med_Chatbot",
   }
@@ -1557,6 +1557,7 @@ export default function Portfolio() {
   };
 
   const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL_INFO.email)}`;
+  const profileImageUrl = `${import.meta.env.BASE_URL}profile-avatar.jpg`;
   const profileFallbackUrl = `${import.meta.env.BASE_URL}profile-fallback.svg`;
 
   return (
@@ -1782,7 +1783,7 @@ export default function Portfolio() {
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border border-white/20 overflow-hidden relative group shadow-2xl">
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none"></div>
                   <img 
-                    src="https://avatars.githubusercontent.com/adityajayashankar" 
+                    src={profileImageUrl}
                     alt="Aditya Jayashankar" 
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
                     onError={(e) => {
@@ -1984,10 +1985,10 @@ export default function Portfolio() {
                     <img 
                       src={project.imageUrl} 
                       alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                      className="absolute inset-0 w-full h-full object-cover opacity-85 contrast-110 saturate-110 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700"
                     />
                     
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-90 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-95 pointer-events-none" />
                     
                     <div className="absolute top-6 left-6 flex gap-2 pointer-events-none">
                        <div className="w-2 h-2 bg-white/50" />

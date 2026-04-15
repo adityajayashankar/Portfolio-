@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">CortexKG project art</title>
+  <desc id="desc">Graph intelligence interface artwork for CortexKG.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050608" />
+      <stop offset="60%" stop-color="#091018" />
+      <stop offset="100%" stop-color="#0d1722" />
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#59d7ff" stop-opacity="0.24" />
+      <stop offset="100%" stop-color="#59d7ff" stop-opacity="0" />
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)" />
+  <rect width="1200" height="720" fill="url(#halo)" />
+  <g opacity="0.07" stroke="#fff">
+    <path d="M0 144h1200M0 288h1200M0 432h1200M0 576h1200" />
+    <path d="M150 0v720M300 0v720M450 0v720M600 0v720M750 0v720M900 0v720M1050 0v720" />
+  </g>
+  <ellipse cx="600" cy="310" rx="324" ry="178" fill="none" stroke="#1a3145" stroke-width="2" />
+  <ellipse cx="600" cy="310" rx="250" ry="134" fill="none" stroke="#1a3145" stroke-width="2" />
+  <ellipse cx="600" cy="310" rx="170" ry="88" fill="none" stroke="#1a3145" stroke-width="2" />
+  <path d="M290 376c150 -76 442 -118 650 -86" fill="none" stroke="#59d7ff" stroke-opacity="0.4" stroke-width="4" />
+  <path d="M318 248c154 94 466 124 594 74" fill="none" stroke="#59d7ff" stroke-opacity="0.28" stroke-width="4" />
+  <g fill="#071019" stroke="#7ce3ff" stroke-opacity="0.45">
+    <circle cx="342" cy="284" r="48" />
+    <circle cx="474" cy="182" r="36" />
+    <circle cx="632" cy="214" r="30" />
+    <circle cx="840" cy="280" r="64" />
+    <circle cx="384" cy="446" r="54" />
+    <circle cx="590" cy="480" r="42" />
+    <circle cx="824" cy="454" r="76" />
+  </g>
+  <g stroke="#66dfff" stroke-width="5" stroke-linecap="round">
+    <path d="M390 267l59 -58 149 23 196 54" />
+    <path d="M390 446l154 24 212 -13" />
+    <path d="M474 214l-46 172M632 244l-34 194M840 344l-36 36" />
+  </g>
+  <g fill="#9beaff" filter="url(#soft)">
+    <circle cx="342" cy="284" r="7" />
+    <circle cx="474" cy="182" r="7" />
+    <circle cx="632" cy="214" r="7" />
+    <circle cx="840" cy="280" r="8" />
+    <circle cx="384" cy="446" r="8" />
+    <circle cx="590" cy="480" r="7" />
+    <circle cx="824" cy="454" r="9" />
+  </g>
+  <rect x="878" y="132" width="190" height="148" rx="18" fill="#09131d" stroke="#fff" stroke-opacity="0.08" />
+  <text x="908" y="170" font-family="Consolas, monospace" font-size="18" fill="#8ba3b7">query path</text>
+  <text x="908" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#fff">CVE-2026-graph</text>
+  <text x="908" y="242" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#fff">4-hop relation</text>
+  <rect x="908" y="252" width="108" height="8" rx="4" fill="#66dfff" fill-opacity="0.7" />
+  <text x="148" y="562" font-family="Segoe UI, Arial, sans-serif" font-size="64" font-weight="700" fill="#ffffff">CORTEXKG</text>
+  <text x="150" y="606" font-family="Consolas, monospace" font-size="24" letter-spacing="4" fill="#8fe8ff">GRAPH REASONING PLUS VECTOR SEARCH</text>
+  <text x="150" y="642" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#8b949e">Cyber intelligence mapped as traversable relationships for multi-hop insight</text>
+</svg>
