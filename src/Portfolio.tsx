@@ -230,15 +230,16 @@ const PERSONAL_INFO = {
 const EXPERIENCES: Experience[] = [
   {
     id: 1,
-    role: "Product Development Intern",
-    company: "PESU Venture Labs",
+    role: "Co-Founder",
+    company: "DeplAi | CoCreate Ventures",
     period: "Jan 2026 - Present",
     description: [
-      "DEPLAI: AI-powered DevOps orchestration platform for intelligent cloud deployments.",
-      "Built multi-agent backend systems and automated infrastructure with Terraform workflows.",
-      "Integrated repository analysis within a cross-functional agile team."
+      "Making AI handle the heavy lifting for DevSecOps and the broader software lifecycle, with a multi-agent backend built on LangGraph leveraging memory and state persistence to maintain context across long-running, complex processes.",
+      "Deployment Service: Agents read a repository, determine architectural requirements, and auto-generate Terraform code to provision exact AWS services needed — fully human-in-the-loop with review, tweak, and approve.",
+      "Security Remediation: Built a service that scans the codebase and automatically writes and applies fixes, rather than just flagging vulnerabilities.",
+      "Customization Service: Co-developed a layer that lets teams tweak frontend designs via natural language prompts — safely applies changes, resolves dependency issues, and generates a live UI preview on the fly."
     ],
-    technologies: ["Terraform", "Docker", "TypeScript", "LangGraph", "React"]
+    technologies: ["Terraform", "Docker", "TypeScript", "LangGraph", "React", "AWS"]
   },
   {
     id: 2,
@@ -246,7 +247,8 @@ const EXPERIENCES: Experience[] = [
     company: "PES University",
     period: "2022 - 2026",
     description: [
-      "CGPA: 7.7. Awarded merit-based scholarship for academic excellence in Semesters 5 & 6.",
+      "CGPA: 7.79. Awarded merit-based scholarship for academic excellence in Semesters 5 & 6.",
+      "Published paper titled \"AI-Assisted Design and Implementation of an Analog EEG Sensor Using a Shared CMOS Operational Amplifier Core\" at the IEEE 6th CONIT Conference, 2026.",
       "Mentored 500+ sophomore students in Machine Learning through the Bootstrap program.",
       "Participated in multiple hackathons delivering AI/ML and full-stack solutions."
     ],
